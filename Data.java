@@ -1,8 +1,9 @@
+import java.util.Arrays;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
+
 
 public class Data {
 
@@ -13,7 +14,7 @@ public class Data {
     public int[] R, A, B, X, Z;
     public int e;
     public AtomicInteger a;
-    public String inputOption;
+
     public CyclicBarrier B1 = new CyclicBarrier(Task_num);
 
     public Semaphore s1 = new Semaphore(0,true);
@@ -25,17 +26,20 @@ public class Data {
     public Semaphore s7 = new Semaphore(0,true);
     public Semaphore s8 = new Semaphore(0,true);
 
-    public int[][] index;
 
-    public  Data(int N, String inputOption) {
+    public  Data(int N) {
         this.N = createN();
-        this.inputOption = inputOption;
+       // this.inputOption = inputOption;
         h = N/Task_num;
         a = new AtomicInteger(0);
         MA = new int[N][N];
         MV = new int[N][N];
         MM = new int[N][N];
         MC = new int[N][N];
+        MC = new int[][]{{1, 2, 5},
+                {9, 3, 2},
+                {7, 4, 6}
+        };
 
         R = new int[N];
         A = new int[N];
@@ -47,10 +51,7 @@ public class Data {
 
     }
     public static int createN() {
-        Scanner in = new Scanner(System.in);
-        System.out.print("Enter N: ");
-        int N = in.nextInt();
-        System.out.println(N);
+        int N=3;
         return N;
     }
 
@@ -96,6 +97,11 @@ public class Data {
         return vector;
     }
 
+    public int copyNumber(int p) {
+        return p;
+    }
+
+    //функції для обрахунків
     public int maxValue() {
         int ai = Z[0];
         for (int i = 0; i < Z.length; i++) {
@@ -111,7 +117,28 @@ public class Data {
         return ai;
     }
 
-    public int[][] multiplicationOfMatrices(int[][] matrix1, int[][] matrix2) {
+    public int[] countTheThirdOperation() {
+        int[] vector = new int[N];
+        int[][] matrix = new int[N][N];
+
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        int[] result = new int[rows];
+
+        for (int j = 0; j < rows; j++) {
+            int sum = 0;
+            for (int i = 0; i < cols; i++) {
+                sum += vector[i] * matrix[i][j];
+            }
+            result[j] = sum;
+        }
+        return result;
+    }
+
+    public int[][] countTheFourthOperation() {
+        int[][] matrix1 = new int[N][N];
+        int[][] matrix2 = new int[N][N];
         int rows1 = matrix1.length;
         int cols1 = matrix1[0].length;
         int cols2 = matrix2[0].length;
@@ -130,6 +157,7 @@ public class Data {
         return result;
     }
 
+
     //Rh = a*A + e*Xh*MA
 
     public int[] theResultOfOperation(int a, int[] A, int e, int[] X, int[][]MA) {
@@ -139,6 +167,7 @@ public class Data {
         int[] temp3 = multiplyMatricesOnVector(temp2, MA);
         R = addVectors(temp, temp3);
 
+        System.out.println(R);
         return R;
     }
 
@@ -186,5 +215,12 @@ public class Data {
             result[i] = vector1[i] + vector2[i];
         }
         return result;
+    }
+
+    public int[] vectorOutput(int[] vector) {
+        for (int i = 0; i < vector.length; i++) {
+            System.out.println(Arrays.toString(vector));
+        }
+        return vector;
     }
 }
